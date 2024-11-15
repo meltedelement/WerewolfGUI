@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:gravity="center"
+    android:padding="16dp">
+
+    <TextView
+        android:id="@+id/textViewSummary"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Night actions are complete. Proceed to daytime actions when ready."
+        android:textSize="18sp"
+        android:textAlignment="center"
+        android:paddingBottom="20dp" />
+
+    <Button
+        android:id="@+id/buttonProceedToDay"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Proceed to Daytime Actions" />
+</LinearLayout>
