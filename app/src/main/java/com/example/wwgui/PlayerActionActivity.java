@@ -52,24 +52,27 @@ public class PlayerActionActivity extends AppCompatActivity {
         if (currentPlayerIndex < playersOrder.size()) {
             Player currentPlayer = playersOrder.get(currentPlayerIndex);
 
+
             textViewActivePlayerName.setText("Active Player: " + currentPlayer.getName());
             textViewActivePlayerRole.setText("Role: " + currentPlayer.getRole());
 
             linearLayoutPlayerButtons.removeAllViews();
 
             for (Player otherPlayer : players) {
-                Button playerButton = new Button(this);
-                playerButton.setText(otherPlayer.getName());
+                if (otherPlayer.getAlive()){
+                    Button playerButton = new Button(this);
+                    playerButton.setText(otherPlayer.getName());
 
-                playerButton.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        currentPlayer.performNightAction(otherPlayer);
-                        displayNextPlayer(playersOrder);  // Move to the next player
-                    }
-                });
+                    playerButton.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            currentPlayer.performNightAction(otherPlayer);
+                            displayNextPlayer(playersOrder);  // Move to the next player
+                        }
+                    });
 
-                linearLayoutPlayerButtons.addView(playerButton);
+                    linearLayoutPlayerButtons.addView(playerButton);
+                }
             }
         } else {
             Intent intent = new Intent(PlayerActionActivity.this, EndNightActionsActivity.class);

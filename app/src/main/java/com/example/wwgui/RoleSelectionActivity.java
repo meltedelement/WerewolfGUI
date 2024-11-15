@@ -71,6 +71,7 @@ public class RoleSelectionActivity extends AppCompatActivity {
             Intent intent = new Intent(RoleSelectionActivity.this, PlayerActionActivity.class);
             intent.putExtra("players", playy); // Pass the updated players list
             startActivity(intent);
+            finish();
         }
     }
 }

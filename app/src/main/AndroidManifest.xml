@@ -43,6 +43,13 @@
             android:theme="@style/Theme.AppCompat.Light.DarkActionBar"
             android:exported="true">
         </activity>
+
+        <activity
+            android:name=".DaytimeActionsActivity"
+            android:label="Kill a player in the daytime vote"
+            android:theme="@style/Theme.AppCompat.Light.DarkActionBar"
+            android:exported="true">
+        </activity>
     </application>
 
 </manifest>

@@ -1,23 +1,75 @@
-<?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:gravity="center"
     android:padding="16dp">
 
     <TextView
-        android:id="@+id/textViewSummary"
+        android:id="@+id/textViewNightSummaryTitle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Night actions are complete. Proceed to daytime actions when ready."
-        android:textSize="18sp"
-        android:textAlignment="center"
-        android:paddingBottom="20dp" />
+        android:text="Night Summary"
+        android:textSize="20sp"
+        android:textStyle="bold"
+        android:paddingBottom="16dp"/>
+
+    <LinearLayout
+        android:id="@+id/linearLayoutPlayersDied"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:paddingBottom="16dp">
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Players Who Died:"
+            android:textStyle="bold"/>
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/linearLayoutPlayersSilenced"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:paddingBottom="16dp">
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Players Silenced:"
+            android:textStyle="bold"/>
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/linearLayoutPlayersHexed"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:paddingBottom="16dp">
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Players Hexed:"
+            android:textStyle="bold"/>
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/linearLayoutPlayersDoused"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Players Doused:"
+            android:textStyle="bold"/>
+    </LinearLayout>
 
     <Button
-        android:id="@+id/buttonProceedToDay"
+        android:id="@+id/buttonProceedToDaytime"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Proceed to Daytime Actions" />
+        android:text="Proceed to Daytime Actions"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="20dp"/>
 </LinearLayout>

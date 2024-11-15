@@ -5,9 +5,9 @@ import java.util.Arrays;
 
 
 public class Game{
-    Launcher launchy = Launcher.getInstance();
-    private int nightNum = 0;
-    private int aliveCount;
+
+    public static boolean arsonistIgnite = false;
+    ArrayList<Player> recentlyDead = new ArrayList<>();
 
 
     public enum GameStates{
@@ -49,16 +49,20 @@ public class Game{
     //     return(launchy.players.get(Integer.valueOf(scan.nextLine())));   //Get the player object indicated by the index input by the user
     // }
 
-    public void processDeaths(ArrayList<Player> players){
+    public ArrayList<Player> processDeaths(ArrayList<Player> players){
+        recentlyDead.clear();
         for(Player x : players){
-            if (x.getAttacked() && ! x.getDefended()){
+            if (x.getAttacked() && ! x.getDefended() || arsonistIgnite && x.getDoused()){
                 x.kill();
+                recentlyDead.add(x);
             }
             if (!Arrays.asList(Player.basicDefenseRoles).contains(x.getRole())){
                 x.unDefend();
 
             }
         }
+        arsonistIgnite = false;
+        return recentlyDead;
     }
 
     public ArrayList<Player> nightActions(ArrayList<Player> players){
@@ -66,7 +70,7 @@ public class Game{
         Roles[] nightOrder = {Roles.WEREWOLF, Roles.SORCERER, Roles.BODYGUARD, Roles.SEER, Roles.ARSONIST};
         for (Roles role : nightOrder){
             for(Player player : players){
-                if (! player.skipVisit && player.getRole() == role){
+                if (! player.skipVisit && player.getAlive() && player.getRole() == role){
                     playerNightOrder.add(player);
                 }
             }
@@ -79,30 +83,30 @@ public class Game{
     }
 
 
-    public void gameStart(ArrayList<Player> players){
-        GameStates gameState = GameStates.NIGHT;
-        while (gameState != GameStates.FINISHED){
-            switch (gameState) {
-                case NIGHT:
-                nightActions(players);
-                nightNum += 1;
-                processDeaths(players);
-                gameState = GameStates.DAY;
-                break;
+//    public void gameStart(ArrayList<Player> players){
+//        GameStates gameState = GameStates.NIGHT;
+//        while (gameState != GameStates.FINISHED){
+//            switch (gameState) {
+//                case NIGHT:
+//                nightActions(players);
+//                nightNum += 1;
+//                processDeaths(players);
+//                gameState = GameStates.DAY;
+//                break;
+//
+//                case DAY:
+//                    dayActions();
+//                    gameState = GameStates.NIGHT;
+//                    break;
+//
+//
+//                default:
+//                    break;
+//            }
+//        }
+//    }
 
-                case DAY:
-                    dayActions();
-                    gameState = GameStates.NIGHT;
-                    break;
-                
 
-                default:
-                    break;
-            }
-        }
-    }
-
-    
 
 
 

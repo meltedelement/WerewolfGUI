@@ -15,6 +15,9 @@ public class Player implements Serializable {
     private boolean doused = false;
     private boolean killWolf = false;
     public boolean skipVisit = false;
+    private  boolean hexed = false;
+    private boolean alert = false;
+    private Player doppledTarget;
 
     public static final Roles[] townRoles = {Roles.BODYGUARD, Roles.SEER, Roles.VETERAN, Roles.VILLAGER};
     public static final Roles[] neutraRoles = {Roles.ARSONIST, Roles.DOPPLEGANGER};
@@ -53,21 +56,33 @@ public class Player implements Serializable {
         return this.name;
     }
 
+    public boolean getDoused() {
+        return this.doused;
+    }
+
+    public boolean getSilenced(){return this.silenced; }
+
+    public boolean getHexed(){return this.hexed; }
+
     public Roles getRole() {
         return this.role;
     }
 
     public boolean getAttacked() {
-        return attacked;
+        return this.attacked;
     }
 
     public boolean getDefended() {
-        return defended;
+        return this.defended;
     }
 
     public boolean getAlive() {
-        return alive;
+        return this.alive;
     }
+
+    public boolean getOnAlert(){return this.alert;}
+
+    public Player getDoppledTarget(){return this.doppledTarget; }
 
     public void attack() {
         this.attacked = true;
@@ -89,14 +104,19 @@ public class Player implements Serializable {
         this.silenced = true;
     }
 
+    public void hex(){ this.hexed = true; }
+
     public void douse() {
         this.doused = true;
     }
 
+
+
+
     public void performNightAction(Player selectedPlayer) {
         if (selectedPlayer.getRole() == Roles.ARSONIST) {
             this.douse();
-        } else if (selectedPlayer.getRole() == Roles.VETERAN) {
+        } else if (selectedPlayer.getOnAlert()) {
             this.kill();
         }
 
@@ -109,8 +129,23 @@ public class Player implements Serializable {
                 nightActionBodyguard(selectedPlayer);
                 break;
 
+            case ARSONIST:
+                nightActionArsonist(selectedPlayer);
+                break;
+
+            case SEER:
+                nightActionSeer(selectedPlayer);
+                break;
+
+            case DOPPLEGANGER:
+                if (this.getDoppledTarget() == null){
+                    nightActionDoppleganger(selectedPlayer);
+                }
+                break;
+
             case VILLAGER:
                 break;
+
 
             default:
                 break;
@@ -130,11 +165,20 @@ public class Player implements Serializable {
     }
 
     private void nightActionArsonist(Player selectedPlayer) {
-        selectedPlayer.douse();
+        if (selectedPlayer == this) {
+            Game.arsonistIgnite = true;
+        }
+        else{
+            selectedPlayer.douse();
+        }
     }
 
     private void nightActionBodyguard(Player selectedPlayer) {
         selectedPlayer.defend();
+    }
+
+    private void nightActionDoppleganger(Player selectedPlayer) {
+        this.doppledTarget = selectedPlayer;
     }
 
     private void nightActionVillager() {
