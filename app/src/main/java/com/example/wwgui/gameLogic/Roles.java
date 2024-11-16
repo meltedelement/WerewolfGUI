@@ -11,5 +11,7 @@ public enum Roles {
         VETERAN,
         SEER,
         LYCAN,
-        DOPPLEGANGER
+        DOPPLEGANGER,
+        TANNER,
+        HUNTER
 }

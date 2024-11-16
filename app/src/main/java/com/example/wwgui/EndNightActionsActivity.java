@@ -29,10 +29,12 @@ public class EndNightActionsActivity extends AppCompatActivity {
         // Retrieve players list from intent
         players = (ArrayList<Player>) getIntent().getSerializableExtra("players");
 
-        ArrayList<Player> recentDeaths = gaming.processDeaths(players);
+        ArrayList<Player> recentDeaths = new ArrayList<>();
+        recentDeaths = gaming.processDeaths(players);
 
         // Display statuses
-        displayPlayers(linearLayoutPlayersDied, "Died", player -> recentDeaths.contains(player));
+        ArrayList<Player> finalRecentDeaths = recentDeaths;
+        displayPlayers(linearLayoutPlayersDied, "Died", player -> finalRecentDeaths.contains(player));
         displayPlayers(linearLayoutPlayersSilenced, "Silenced", player -> player.getSilenced());
         displayPlayers(linearLayoutPlayersHexed, "Hexed", player -> player.getHexed());
         displayPlayers(linearLayoutPlayersDoused, "Doused", player -> player.getDoused());

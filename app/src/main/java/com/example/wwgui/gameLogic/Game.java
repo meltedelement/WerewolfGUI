@@ -67,7 +67,7 @@ public class Game{
 
     public ArrayList<Player> nightActions(ArrayList<Player> players){
         ArrayList<Player> playerNightOrder = new ArrayList<>();
-        Roles[] nightOrder = {Roles.WEREWOLF, Roles.SORCERER, Roles.BODYGUARD, Roles.SEER, Roles.ARSONIST};
+        Roles[] nightOrder = {Roles.SEER, Roles.WEREWOLF, Roles.SORCERER, Roles.BODYGUARD, Roles.ARSONIST};
         for (Roles role : nightOrder){
             for(Player player : players){
                 if (! player.skipVisit && player.getAlive() && player.getRole() == role){
