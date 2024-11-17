@@ -14,5 +14,6 @@ public enum Roles {
         DOPPLEGANGER,
         TANNER,
         HUNTER,
-        AURASEER
+        AURASEER,
+        HEXWOLF
 }

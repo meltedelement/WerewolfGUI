@@ -114,7 +114,7 @@ public class PlayerActionActivity extends AppCompatActivity {
 
     private void handleResponsePrompt(Player currentPlayer, Player selectedPlayer) {
         // Check if the current player is a Seer and the selected player is a Werewolf
-        if (currentPlayer.getRole() == Roles.SEER && Arrays.asList(Player.seerVisibleRoles).contains(selectedPlayer.getRole())) {
+        if (currentPlayer.getRole() == Roles.SEER && Arrays.asList(Player.seerVisibleRoles).contains(selectedPlayer.getRole()) || currentPlayer.getRole() == Roles.SEER && selectedPlayer.getHexed()) {
             // Show a dialog to inform the Seer
             AlertDialog.Builder builder = new AlertDialog.Builder(this);
             builder.setTitle("Seer Vision")

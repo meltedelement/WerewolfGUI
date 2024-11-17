@@ -22,21 +22,6 @@ public class Game{
     }
 
 
-    public void getCurrentKillWolf(ArrayList<Player> players){
-        Roles[] wolfKillPriority = {Roles.WEREWOLF, Roles.MISTWOLF, Roles.CUBWOLF, Roles.SORCERER};
-        boolean wolfSelected = false;
-        for (Roles x : wolfKillPriority){
-            for (Player y : players){
-                if (y.getRole() == x && ! wolfSelected){
-                    y.setKillWolf();
-                }
-
-            }
-        }
-    }
-    
-
-
     // public Player playerPick(){  // A placeholder function to allow a player to be selected in command line until i have a frontend
     //     Scanner scan = new Scanner(System.in);
     //     for(Player x : launchy.players){
@@ -71,7 +56,7 @@ public class Game{
 
     public ArrayList<Player> nightActions(ArrayList<Player> players){
         ArrayList<Player> playerNightOrder = new ArrayList<>();
-        Roles[] nightOrder = {Roles.SEER, Roles.AURASEER, Roles.WEREWOLF, Roles.SORCERER, Roles.BODYGUARD, Roles.ARSONIST};
+        Roles[] nightOrder = {Roles.WEREWOLF, Roles.HEXWOLF, Roles.SEER, Roles.AURASEER, Roles.SORCERER, Roles.BODYGUARD, Roles.ARSONIST};
         for (Roles role : nightOrder){
             for(Player player : players){
                 if (! player.skipVisit && player.getAlive() && player.getRole() == role){

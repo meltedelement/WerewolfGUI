@@ -14,22 +14,23 @@ public class Player implements Serializable {
     private boolean defended = false;
     private boolean silenced = false;
     private boolean doused = false;
-    private boolean killWolf = false;
     public boolean skipVisit = false;
     private  boolean hexed = false;
     private boolean alert = false;
     private Player doppledTarget;
     private boolean hunterShootReady = false;
     private boolean observing = false;
+    private boolean hexNight = true;
 
     public static final Roles[] townRoles = {Roles.BODYGUARD, Roles.SEER, Roles.VETERAN, Roles.VILLAGER};
     public static final Roles[] neutraRoles = {Roles.ARSONIST, Roles.DOPPLEGANGER};
     public static final Roles[] werewolfRoles = {Roles.CUBWOLF, Roles.MISTWOLF, Roles.WEREWOLF, Roles.LYCAN};
     public static final Roles[][] teamsList = {townRoles, neutraRoles, werewolfRoles};
 
-    public static final Roles[] seerVisibleRoles = {Roles.WEREWOLF, Roles.CUBWOLF, Roles.SORCERER, Roles.MISTWOLF, Roles.ARSONIST, Roles.LYCAN};
+    public static final Roles[] seerVisibleRoles = {Roles.WEREWOLF, Roles.CUBWOLF, Roles.SORCERER, Roles.MISTWOLF, Roles.ARSONIST, Roles.LYCAN, Roles.HEXWOLF};
     public static final Roles[] basicDefenseRoles = {Roles.ARSONIST};
     public static final Roles[] noVisitRoles = {Roles.VILLAGER, Roles.VETERAN, Roles.LYCAN, Roles.MISTWOLF};
+    public static final Roles[] werewolfKillPriority = {Roles.CUBWOLF, Roles.WEREWOLF, Roles.MISTWOLF, Roles.HEXWOLF, Roles.SORCERER};
 
     private transient Game gameObj = new Game(); // Mark as transient since Game may not be serializable
 
@@ -52,10 +53,6 @@ public class Player implements Serializable {
         }
     }
 
-    public void setKillWolf() {
-        this.killWolf = true;
-    }
-
     public String getName() {
         return this.name;
     }
@@ -68,13 +65,11 @@ public class Player implements Serializable {
 
     public boolean getHexed(){return this.hexed; }
 
+    public void setHexed(boolean input){ this.hexed = input; }
+
     public boolean getHunterShootReady(){return this.hunterShootReady;}
 
     public void setHunterShootReady(boolean input){this.hunterShootReady = input;}
-
-    public boolean getObserving(){return this.observing;}
-
-    public void setObserving(boolean input){this.observing = input;}
 
     public Roles getRole() {
         return this.role;
@@ -118,8 +113,6 @@ public class Player implements Serializable {
         this.silenced = true;
     }
 
-    public void hex(){ this.hexed = true; }
-
     public void douse() {
         this.doused = true;
     }
@@ -157,6 +150,11 @@ public class Player implements Serializable {
                 }
                 break;
 
+            case HEXWOLF:
+                nightActionHexwolf(selectedPlayer);
+                break;
+
+
             case VILLAGER:
                 break;
 
@@ -176,9 +174,6 @@ public class Player implements Serializable {
 
         return(true);
     }
-    private void nightActionKillwolf(Player selectedPlayer) {
-        selectedPlayer.attack();
-    }
 
     private void nightActionWerewolf(Player selectedPlayer) {
         selectedPlayer.attack();
@@ -191,6 +186,17 @@ public class Player implements Serializable {
         else{
             selectedPlayer.douse();
         }
+    }
+
+    private void nightActionHexwolf(Player selectedPlayer){
+        if (hexNight){
+            selectedPlayer.setHexed(true);
+            hexNight = false;
+        }
+        else{
+            hexNight = true;
+        }
+
     }
 
     private void nightActionBodyguard(Player selectedPlayer) {
