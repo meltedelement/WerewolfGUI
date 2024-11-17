@@ -13,5 +13,6 @@ public enum Roles {
         LYCAN,
         DOPPLEGANGER,
         TANNER,
-        HUNTER
+        HUNTER,
+        AURASEER
 }

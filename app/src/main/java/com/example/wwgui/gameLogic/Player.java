@@ -20,10 +20,12 @@ public class Player implements Serializable {
     private boolean alert = false;
     private Player doppledTarget;
     private boolean hunterShootReady = false;
+    private boolean observing = false;
 
     public static final Roles[] townRoles = {Roles.BODYGUARD, Roles.SEER, Roles.VETERAN, Roles.VILLAGER};
     public static final Roles[] neutraRoles = {Roles.ARSONIST, Roles.DOPPLEGANGER};
     public static final Roles[] werewolfRoles = {Roles.CUBWOLF, Roles.MISTWOLF, Roles.WEREWOLF, Roles.LYCAN};
+    public static final Roles[][] teamsList = {townRoles, neutraRoles, werewolfRoles};
 
     public static final Roles[] seerVisibleRoles = {Roles.WEREWOLF, Roles.CUBWOLF, Roles.SORCERER, Roles.MISTWOLF, Roles.ARSONIST, Roles.LYCAN};
     public static final Roles[] basicDefenseRoles = {Roles.ARSONIST};
@@ -70,6 +72,10 @@ public class Player implements Serializable {
 
     public void setHunterShootReady(boolean input){this.hunterShootReady = input;}
 
+    public boolean getObserving(){return this.observing;}
+
+    public void setObserving(boolean input){this.observing = input;}
+
     public Roles getRole() {
         return this.role;
     }
@@ -97,6 +103,8 @@ public class Player implements Serializable {
     public void defend() {
         this.defended = true;
     }
+
+    public void unAttack(){ this.attacked = false;}
 
     public void unDefend() {
         this.defended = false;
@@ -152,7 +160,9 @@ public class Player implements Serializable {
             case VILLAGER:
                 break;
 
-
+            case AURASEER:
+                nightActionAuraSeer(selectedPlayer);
+                break;
             default:
                 break;
         }
@@ -162,6 +172,10 @@ public class Player implements Serializable {
         return Arrays.asList(seerVisibleRoles).contains(selectedPlayer.getRole());
     }
 
+    private boolean nightActionAuraSeer(Player selectedPlayer){
+
+        return(true);
+    }
     private void nightActionKillwolf(Player selectedPlayer) {
         selectedPlayer.attack();
     }

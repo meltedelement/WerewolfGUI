@@ -26,6 +26,10 @@ public class PlayerActionActivity extends AppCompatActivity {
     private ArrayList<Player> players;
     private ArrayList<Player> playersOrder; // Store the night action order
     private int currentPlayerIndex = 0;
+    private boolean keepAuraTurn = false;
+    private Player auraFirstPick;
+    private Player auraSecondPick;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -76,12 +80,14 @@ public class PlayerActionActivity extends AppCompatActivity {
                         // Perform night action
                         currentPlayer.performNightAction(otherPlayer);
 
-                        // Handle special Seer case
+                        // Handle special Seer and Aura seer case
                         handleResponsePrompt(currentPlayer, otherPlayer);
 
-                        // Move to the next player
-                        currentPlayerIndex++;
-                        displayPlayerActions(); // Recursive call for the next player
+                        if(! keepAuraTurn) {
+                            // Move to the next player
+                            currentPlayerIndex++;
+                            displayPlayerActions(); // Recursive call for the next player
+                        }
                     }
                 });
 
@@ -90,11 +96,11 @@ public class PlayerActionActivity extends AppCompatActivity {
             }
             Button skipButton = new Button(this);
             skipButton.setText("Skip");
-            skipButton.setOnClickListener(new View.OnClickListener(){
+            skipButton.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                currentPlayerIndex++;
-                displayPlayerActions();
+                    currentPlayerIndex++;
+                    displayPlayerActions();
                 }
             });
             linearLayoutPlayerButtons.addView(skipButton);
@@ -120,6 +126,63 @@ public class PlayerActionActivity extends AppCompatActivity {
                         }
                     })
                     .show();
+        }
+
+        else if (currentPlayer.getRole() == Roles.AURASEER) {
+            if (auraFirstPick == null){
+                auraFirstPick = selectedPlayer;
+                keepAuraTurn = true;
+                AlertDialog.Builder builder = new AlertDialog.Builder(this);
+                builder.setTitle("Aura Seer Vision")
+                        .setMessage(auraFirstPick + " is the Aura seer's first pick")
+                        .setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                dialog.dismiss(); // Close the dialog
+                            }
+                        })
+                        .show();
+            }
+            else{
+                auraSecondPick = selectedPlayer;
+                keepAuraTurn = false;
+                boolean match = false;
+
+                for (Roles[] x : Player.teamsList){
+                    if (Arrays.asList(x).contains(auraFirstPick.getRole()) && Arrays.asList(x).contains(auraSecondPick.getRole())){
+                        match = true;
+                    }
+                    else if (Arrays.asList(Player.werewolfRoles).contains(auraFirstPick.getRole()) && auraSecondPick.getHexed() || Arrays.asList(Player.werewolfRoles).contains(auraSecondPick.getRole()) && auraFirstPick.getHexed()) {
+                        match = true;
+                    }
+                }
+
+                if (match) {
+                    AlertDialog.Builder builder = new AlertDialog.Builder(this);
+                    builder.setTitle("Aura Seer Vision")
+                            .setMessage(auraFirstPick.getName() + " and " + auraSecondPick.getName() + " are on the same team")
+                            .setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+                                    dialog.dismiss(); // Close the dialog
+                                }
+                            })
+                            .show();
+                }
+
+                else{
+                    AlertDialog.Builder builder = new AlertDialog.Builder(this);
+                    builder.setTitle("Aura Seer Vision")
+                            .setMessage(auraFirstPick.getName() + " and " + auraSecondPick.getName() + " are NOT on the same team")
+                            .setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+                                    dialog.dismiss(); // Close the dialog
+                                }
+                            })
+                            .show();
+                }
+            }
         }
     }
 }
