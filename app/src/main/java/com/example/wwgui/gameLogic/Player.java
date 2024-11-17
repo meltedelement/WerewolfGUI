@@ -19,6 +19,7 @@ public class Player implements Serializable {
     private  boolean hexed = false;
     private boolean alert = false;
     private Player doppledTarget;
+    private boolean hunterShootReady = false;
 
     public static final Roles[] townRoles = {Roles.BODYGUARD, Roles.SEER, Roles.VETERAN, Roles.VILLAGER};
     public static final Roles[] neutraRoles = {Roles.ARSONIST, Roles.DOPPLEGANGER};
@@ -64,6 +65,10 @@ public class Player implements Serializable {
     public boolean getSilenced(){return this.silenced; }
 
     public boolean getHexed(){return this.hexed; }
+
+    public boolean getHunterShootReady(){return this.hunterShootReady;}
+
+    public void setHunterShootReady(boolean input){this.hunterShootReady = input;}
 
     public Roles getRole() {
         return this.role;

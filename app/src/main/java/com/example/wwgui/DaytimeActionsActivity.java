@@ -21,6 +21,7 @@ public class DaytimeActionsActivity extends AppCompatActivity {
     private Button buttonSkip;
     private ArrayList<Player> players;
     private Player selectedPlayer;
+    private boolean hunterVote = false;
 
 
     @Override
@@ -45,21 +46,29 @@ public class DaytimeActionsActivity extends AppCompatActivity {
         buttonContinue.setVisibility(View.GONE);
         buttonSkip.setVisibility(View.GONE);
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
-
+        for (Player x : players){
+            if (x.getHunterShootReady()){
+                hunterVote = true;
+                x.setHunterShootReady(false);
+                builder.setTitle("Hunter death")
+                        .setMessage(x.getName() + "was a hunter. in the vote pick the person they're killing")
+                        .setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                dialog.dismiss(); // Close the dialog
+                            }
+                        })
+                        .show();
+            }
+        }
         // Set up the "Continue" button to return to PlayerActionActivity
         buttonContinue.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 selectedPlayer.kill();
-                if (selectedPlayer.getRole() != Roles.HUNTER && selectedPlayer.getRole() != Roles.TANNER){
-                    Intent intent = new Intent(DaytimeActionsActivity.this, PlayerActionActivity.class);
-                    intent.putExtra("players", players);
-                    startActivity(intent);
-                    finish();
-                }
-                else{
+                if (selectedPlayer.getRole() == Roles.HUNTER || selectedPlayer.getRole() == Roles.TANNER){
                     builder.setTitle("Tanner/Hunter voted")
-                            .setMessage(selectedPlayer.getName() + " is a " + selectedPlayer.getRole())
+                            .setMessage(selectedPlayer.getName() + " is a " + selectedPlayer.getRole() + ", next vote is who they kill")
                             .setPositiveButton("OK", new DialogInterface.OnClickListener() {
                                 @Override
                                 public void onClick(DialogInterface dialog, int which) {
@@ -67,6 +76,27 @@ public class DaytimeActionsActivity extends AppCompatActivity {
                                 }
                             })
                             .show();
+
+
+                }
+
+                else if (hunterVote) {
+                    builder.setTitle("Hunter shoots")
+                            .setMessage("The hunter has shot" + selectedPlayer.getName() + "The" +selectedPlayer.getRole())
+                            .setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+                                    dialog.dismiss(); // Close the dialog
+                                }
+                            })
+                            .show();
+                }
+
+                else{
+                    Intent intent = new Intent(DaytimeActionsActivity.this, PlayerActionActivity.class);
+                    intent.putExtra("players", players);
+                    startActivity(intent);
+                    finish();
                 }
 
             }

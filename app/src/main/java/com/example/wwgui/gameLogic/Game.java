@@ -55,6 +55,9 @@ public class Game{
             if (x.getAttacked() && ! x.getDefended() || arsonistIgnite && x.getDoused()){
                 x.kill();
                 recentlyDead.add(x);
+                if (x.getRole() == Roles.HUNTER){
+                    x.setHunterShootReady(true);
+                }
             }
             if (!Arrays.asList(Player.basicDefenseRoles).contains(x.getRole())){
                 x.unDefend();
