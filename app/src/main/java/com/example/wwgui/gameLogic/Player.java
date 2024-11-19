@@ -19,8 +19,8 @@ public class Player implements Serializable {
     private boolean alert = false;
     private Player doppledTarget;
     private boolean hunterShootReady = false;
-    private boolean observing = false;
     private boolean hexNight = true;
+    private boolean killWolf = false;
 
     public static final Roles[] townRoles = {Roles.BODYGUARD, Roles.SEER, Roles.VETERAN, Roles.VILLAGER};
     public static final Roles[] neutraRoles = {Roles.ARSONIST, Roles.DOPPLEGANGER};
@@ -31,8 +31,6 @@ public class Player implements Serializable {
     public static final Roles[] basicDefenseRoles = {Roles.ARSONIST};
     public static final Roles[] noVisitRoles = {Roles.VILLAGER, Roles.VETERAN, Roles.LYCAN, Roles.MISTWOLF};
     public static final Roles[] werewolfKillPriority = {Roles.CUBWOLF, Roles.WEREWOLF, Roles.MISTWOLF, Roles.HEXWOLF, Roles.SORCERER};
-
-    private transient Game gameObj = new Game(); // Mark as transient since Game may not be serializable
 
     public Player(String name) {
         this.name = name;
@@ -61,6 +59,36 @@ public class Player implements Serializable {
         return this.doused;
     }
 
+    public int getRoleVisitCount() {
+        switch (this.role) {
+            case WEREWOLF:
+                return 1;
+
+            case BODYGUARD:
+                return 1;
+
+            case ARSONIST:
+                return 1;
+
+            case SEER:
+                return 1;
+
+            case DOPPLEGANGER:
+                return 1;
+
+            case HEXWOLF:
+                return 1;
+
+            case VILLAGER:
+                return 0;
+
+            case AURASEER:
+                return 2;
+
+            default:
+                return 0;
+        }
+    }
     public boolean getSilenced(){return this.silenced; }
 
     public boolean getHexed(){return this.hexed; }
@@ -74,6 +102,10 @@ public class Player implements Serializable {
     public Roles getRole() {
         return this.role;
     }
+
+    public boolean getKillwolf(){return this.killWolf;}
+
+    public void setKillwolf(boolean input){this.killWolf = input;}
 
     public boolean getAttacked() {
         return this.attacked;
@@ -121,6 +153,7 @@ public class Player implements Serializable {
 
 
     public void performNightAction(Player selectedPlayer) {
+
         if (selectedPlayer.getRole() == Roles.ARSONIST && selectedPlayer != this) {
             this.douse();
         } else if (selectedPlayer.getOnAlert()) {
@@ -175,7 +208,7 @@ public class Player implements Serializable {
         return(true);
     }
 
-    private void nightActionWerewolf(Player selectedPlayer) {
+    public void nightActionWerewolf(Player selectedPlayer) {
         selectedPlayer.attack();
     }
 

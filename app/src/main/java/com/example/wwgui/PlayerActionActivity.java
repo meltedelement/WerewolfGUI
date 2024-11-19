@@ -9,11 +9,11 @@ import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import androidx.appcompat.app.AppCompatActivity;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 
 import com.example.wwgui.gameLogic.Game;
-import com.example.wwgui.gameLogic.Launcher;
 import com.example.wwgui.gameLogic.Player;
 import com.example.wwgui.gameLogic.Roles;
 
@@ -29,6 +29,9 @@ public class PlayerActionActivity extends AppCompatActivity {
     private boolean keepAuraTurn = false;
     private Player auraFirstPick;
     private Player auraSecondPick;
+    private boolean keepWerewolfTurn;
+    private boolean killwolfActionPerformed;
+
 
 
     @Override
@@ -50,11 +53,19 @@ public class PlayerActionActivity extends AppCompatActivity {
         // Determine the night action order
         playersOrder = gameLogic.nightActions(players);
 
+        for (Player x : playersOrder){
+
+        }
+
         // Start displaying the first player's actions
-        displayPlayerActions();
+        playerButtonInput();
     }
 
-    private void displayPlayerActions() {
+
+
+
+
+    private void playerButtonInput() {
         // Check if there are remaining players to display actions for
         if (currentPlayerIndex < playersOrder.size()) {
             Player currentPlayer = playersOrder.get(currentPlayerIndex);
@@ -66,27 +77,36 @@ public class PlayerActionActivity extends AppCompatActivity {
             // Clear previous buttons
             linearLayoutPlayerButtons.removeAllViews();
 
+
             // Create a button for each other player
+
             for (Player otherPlayer : players) {
                 if (!otherPlayer.getAlive()) continue; // Skip dead players
 
                 Button playerButton = new Button(this);
                 playerButton.setText(otherPlayer.getName());
-
+                ArrayList<Player> playersClicked = new ArrayList<>();
                 // Set click listener to handle player's action
                 playerButton.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
                         // Perform night action
-                        currentPlayer.performNightAction(otherPlayer);
-
+                        if (keepWerewolfTurn){
+                            currentPlayer.nightActionWerewolf(otherPlayer);
+                            killwolfActionPerformed = true;
+                            keepWerewolfTurn = false;
+                        }
+                        else {
+                            currentPlayer.performNightAction(otherPlayer);
+                        }
                         // Handle special Seer and Aura seer case
+                        handleKillWolf(currentPlayer);
                         handleResponsePrompt(currentPlayer, otherPlayer);
 
-                        if(! keepAuraTurn) {
+                        if(! keepAuraTurn && !keepWerewolfTurn) {
                             // Move to the next player
                             currentPlayerIndex++;
-                            displayPlayerActions(); // Recursive call for the next player
+                            playerButtonInput(); // Recursive call for the next player
                         }
                     }
                 });
@@ -100,7 +120,7 @@ public class PlayerActionActivity extends AppCompatActivity {
                 @Override
                 public void onClick(View view) {
                     currentPlayerIndex++;
-                    displayPlayerActions();
+                    playerButtonInput();
                 }
             });
             linearLayoutPlayerButtons.addView(skipButton);
@@ -112,6 +132,11 @@ public class PlayerActionActivity extends AppCompatActivity {
         }
     }
 
+    private void handleKillWolf(Player currentPlayer){
+        if (currentPlayer.getKillwolf() && !killwolfActionPerformed){
+            keepWerewolfTurn = true;
+        }
+    }
     private void handleResponsePrompt(Player currentPlayer, Player selectedPlayer) {
         // Check if the current player is a Seer and the selected player is a Werewolf
         if (currentPlayer.getRole() == Roles.SEER && Arrays.asList(Player.seerVisibleRoles).contains(selectedPlayer.getRole()) || currentPlayer.getRole() == Roles.SEER && selectedPlayer.getHexed()) {

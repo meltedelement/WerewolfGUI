@@ -21,6 +21,53 @@ public class Game{
 
     }
 
+    //Returns a list of all living players
+    public ArrayList<Player> isAliveTest(ArrayList<Player> players){
+        ArrayList<Player> internalList = new ArrayList<>();
+        for(Player x : players){
+            if (x.getAlive()){
+                internalList.add(x);
+            }
+        }
+        return internalList;
+    }
+
+
+    //Returns a list of all players matching the team of the first input player
+    public ArrayList<Player> matchTeamTest(Player player1, ArrayList<Player> players) {
+        ArrayList<Player> internalList = new ArrayList<>();
+        for (Roles[] team : Player.teamsList) {
+            for (Player player2 : players) {
+                if (Arrays.asList(team).contains(player1.getRole()) && Arrays.asList(team).contains(player2.getRole())) {
+                    internalList.add(player2);
+                }
+            }
+        }
+        return(internalList);
+    }
+
+    //returns a list of all players NOT on the team of the first player
+    public ArrayList<Player> oppTeamTest(Player player1, ArrayList<Player> players) {
+        ArrayList<Player> internalList = new ArrayList<>();
+        for (Roles[] team : Player.teamsList) {
+            for (Player player2 : players) {
+                if (Arrays.asList(team).contains(player1.getRole()) && ! Arrays.asList(team).contains(player2.getRole())) {
+                    internalList.add(player2);
+                }
+            }
+        }
+        return(internalList);
+    }
+
+    public ArrayList<Player> notMeTest(Player player, ArrayList<Player> players){
+        ArrayList<Player> internalList = new ArrayList<>();
+        for (Player x : players){
+            if (player != x){
+                internalList.add(x);
+            }
+        }
+        return internalList;
+    }
 
     // public Player playerPick(){  // A placeholder function to allow a player to be selected in command line until i have a frontend
     //     Scanner scan = new Scanner(System.in);
@@ -33,9 +80,18 @@ public class Game{
     //     System.out.println("Enter the number of the selected player");
     //     return(launchy.players.get(Integer.valueOf(scan.nextLine())));   //Get the player object indicated by the index input by the user
     // }
-
+    private boolean finished;
     public ArrayList<Player> processDeaths(ArrayList<Player> players){
         recentlyDead.clear();
+
+        finished = false;
+        for (Player x : players){
+            for (Roles y : Player.werewolfKillPriority){
+                if (x.getRole() == y && x.getAlive()){
+                    x.setKillwolf(true);
+                }
+            }
+        }
         for(Player x : players){
             if (x.getAttacked() && ! x.getDefended() || arsonistIgnite && x.getDoused()){
                 x.kill();
