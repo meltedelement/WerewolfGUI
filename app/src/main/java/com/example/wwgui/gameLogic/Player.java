@@ -1,5 +1,7 @@
 package com.example.wwgui.gameLogic;
 
+import com.example.wwgui.PlayerActionActivity;
+
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -156,7 +158,8 @@ public class Player implements Serializable {
 
         if (selectedPlayer.getRole() == Roles.ARSONIST && selectedPlayer != this) {
             this.douse();
-        } else if (selectedPlayer.getOnAlert()) {
+        }
+        else if (selectedPlayer.getOnAlert()) {
             this.kill();
         }
 

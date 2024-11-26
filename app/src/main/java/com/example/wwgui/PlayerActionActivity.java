@@ -31,9 +31,24 @@ public class PlayerActionActivity extends AppCompatActivity {
     private Player auraSecondPick;
     private boolean keepWerewolfTurn;
     private boolean killwolfActionPerformed;
+    private Player buttonSelectedPlayer;
 
 
 
+    private Player choose(Player performingPlayer) {
+        for (Player otherPlayer : players) {
+            Button playerButton = new Button(this);
+            playerButton.setText(otherPlayer.getName());
+            // Set click listener to handle player's action
+            playerButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    buttonSelectedPlayer = otherPlayer;
+                }
+            });
+        }
+        return buttonSelectedPlayer;
+    }
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -50,6 +65,7 @@ public class PlayerActionActivity extends AppCompatActivity {
         // Get the ArrayList of Player objects from the intent
         players = (ArrayList<Player>) getIntent().getSerializableExtra("players");
 
+
         // Determine the night action order
         playersOrder = gameLogic.nightActions(players);
 
@@ -65,9 +81,10 @@ public class PlayerActionActivity extends AppCompatActivity {
 
 
 
-    private void playerButtonInput() {
+
+    public void playerButtonInput() {
         // Check if there are remaining players to display actions for
-        if (currentPlayerIndex < playersOrder.size()) {
+        if (true) {
             Player currentPlayer = playersOrder.get(currentPlayerIndex);
 
             // Display current player's name and role
@@ -85,7 +102,6 @@ public class PlayerActionActivity extends AppCompatActivity {
 
                 Button playerButton = new Button(this);
                 playerButton.setText(otherPlayer.getName());
-                ArrayList<Player> playersClicked = new ArrayList<>();
                 // Set click listener to handle player's action
                 playerButton.setOnClickListener(new View.OnClickListener() {
                     @Override
